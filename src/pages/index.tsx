@@ -1,25 +1,15 @@
-// pages/index.tsx
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="main-page">
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 24,
-          alignItems: "center",
-          textAlign: "center",
-          marginTop: 40,
-        }}
-      >
+    <main className="home-main">
+      <div className="home-hero">
         <h1 style={{ fontSize: 28, fontWeight: 700 }}>
-          아침 시간을 함께 만드는
+          한동의 든든한 아침을 함께 만드는
           <br />
           아침식사 출석 관리 서비스
         </h1>
-        <p style={{ maxWidth: 520, fontSize: 15, color: "#4b5563" }}>
+        <p style={{ fontSize: 15, color: "#4b5563" }}>
           아침마다 누가 함께 밥을 먹는지, 몇 명이 모일지 쉽게 관리해 보세요.
           <br />
           일정 생성, 참가 신청, 참가자 명단까지 한 번에 확인할 수 있습니다.

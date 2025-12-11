@@ -240,3 +240,19 @@ body {
 .btn-ghost:hover {
   background: #f3f4f6;
 }
+
+.home-main {
+  min-height: 100vh;           
+  display: flex;
+  justify-content: center;     
+  align-items: center;         
+}
+
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  text-align: center;
+  max-width: 520px;
+}
