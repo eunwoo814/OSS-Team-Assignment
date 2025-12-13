@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Attend, fetchAttendList, updateAttend } from "../lib/api";
-import CreateAttendModal from "../components/CreateAttendModal";
-import JoinAttendModal from "../components/JoinAttendModal";
-import ParticipantsModal from "../components/ParticipantsModal";
+import { Attend, fetchAttendList, updateAttend } from "@/lib/api";
+import CreateAttendModal from "@/components/CreateAttendModal";
+import JoinAttendModal from "@/components/JoinAttendModal";
+import ParticipantsModal from "@/components/ParticipantsModal";
+import WeatherCard from "@/components/WeatherCard";
 
 export default function HomePage() {
   const [attendList, setAttendList] = useState<Attend[]>([]);
@@ -15,7 +16,7 @@ export default function HomePage() {
 
   const [participantsModalOpen, setParticipantsModalOpen] = useState(false);
   const [selectedForParticipants, setSelectedForParticipants] =
-    useState<Attend | null>(null);
+  useState<Attend | null>(null);
 
   useEffect(() => {
     fetchAttendList()
@@ -72,6 +73,9 @@ export default function HomePage() {
           일정 생성
         </button>
       </header>
+
+      <WeatherCard lat={36.1037} lon={129.3876} title="포항 현재 날씨" />
+      <div style={{ height: 12 }} />
 
       {attendList.length === 0 ? (
         <div className="empty-text">

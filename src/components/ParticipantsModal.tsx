@@ -1,4 +1,4 @@
-import { Attend } from "../lib/api";
+import { Attend } from "@/lib/api";
 
 type Props = {
   open: boolean;

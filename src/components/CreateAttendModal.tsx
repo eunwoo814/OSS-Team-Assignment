@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Attend, createAttend } from "../lib/api";
+import { Attend, createAttend } from "@/lib/api";
 
 type Props = {
   open: boolean;
