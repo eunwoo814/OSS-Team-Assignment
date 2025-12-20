@@ -1,5 +1,6 @@
-import { FormEvent, useState } from "react";
-import { Attend, createAttend } from "@/lib/api";
+import { FormEvent, useState, useEffect } from "react";
+import { Attend, createAttend, MealType } from "@/lib/api";
+import { getUser } from "@/lib/auth";
 
 type Props = {
   open: boolean;
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export default function CreateAttendModal({ open, onClose, onCreated }: Props) {
+  const user = getUser();
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -15,7 +17,14 @@ export default function CreateAttendModal({ open, onClose, onCreated }: Props) {
   const [maxPeople, setMaxPeople] = useState(6);
   const [host, setHost] = useState("");
   const [memo, setMemo] = useState("");
+  const [mealType, setMealType] = useState<MealType>("아침");
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user && open) {
+      setHost(user.name);
+    }
+  }, [user, open]);
 
   if (!open) return null;
 
@@ -33,6 +42,7 @@ export default function CreateAttendModal({ open, onClose, onCreated }: Props) {
         memo,
         attendCount: 0,
         participants: [],
+        mealType,
       });
       onCreated(newAttend);
       setTitle("");
@@ -42,6 +52,7 @@ export default function CreateAttendModal({ open, onClose, onCreated }: Props) {
       setMaxPeople(6);
       setHost("");
       setMemo("");
+      setMealType("아침");
       onClose();
     } catch {
       alert("일정 생성에 실패했습니다.");
@@ -53,8 +64,34 @@ export default function CreateAttendModal({ open, onClose, onCreated }: Props) {
   return (
     <div className="modal-backdrop">
       <div className="modal">
-        <h2 className="modal-title">새 아침식사 일정 만들기</h2>
+        <h2 className="modal-title">새 식사 일정 만들기</h2>
         <form onSubmit={handleSubmit} className="modal-form">
+          <div className="input-group">
+            <span className="input-label">식사 종류</span>
+            <div style={{ display: "flex", gap: "8px" }}>
+              {(["아침", "점심", "저녁"] as MealType[]).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => setMealType(type)}
+                  style={{
+                    flex: 1,
+                    padding: "10px",
+                    border: `2px solid ${mealType === type ? "#3b82f6" : "#e5e7eb"}`,
+                    borderRadius: "6px",
+                    backgroundColor: mealType === type ? "#eff6ff" : "white",
+                    color: mealType === type ? "#3b82f6" : "#6b7280",
+                    fontWeight: mealType === type ? 600 : 400,
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="input-group">
             <span className="input-label">제목</span>
             <input
@@ -118,6 +155,8 @@ export default function CreateAttendModal({ open, onClose, onCreated }: Props) {
               onChange={(e) => setHost(e.target.value)}
               placeholder="정은우"
               required
+              readOnly
+              style={{ backgroundColor: "#f3f4f6", cursor: "not-allowed" }}
             />
           </div>
 

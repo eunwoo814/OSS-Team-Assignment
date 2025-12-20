@@ -1,4 +1,5 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
+import { getUser } from "@/lib/auth";
 
 type Props = {
   open: boolean;
@@ -7,8 +8,15 @@ type Props = {
 };
 
 export default function JoinAttendModal({ open, onClose, onSubmit }: Props) {
+  const user = getUser();
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user && open) {
+      setName(user.name);
+    }
+  }, [user, open]);
 
   if (!open) return null;
 

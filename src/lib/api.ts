@@ -1,5 +1,7 @@
 import axios from "axios";
 
+export type MealType = "아침" | "점심" | "저녁";
+
 export type Attend = {
   id: string;
   title: string;
@@ -11,6 +13,19 @@ export type Attend = {
   memo: string;
   attendCount: number;
   participants?: string[];
+  mealType: MealType;
+};
+
+export type User = {
+  id: number;
+  username: string;
+  name: string;
+  phone: string;
+};
+
+export type ParticipantContact = {
+  name: string;
+  phone: string;
 };
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -26,6 +41,26 @@ const api = axios.create({
   },
 });
 
+// Auth APIs
+export async function signup(data: {
+  username: string;
+  password: string;
+  name: string;
+  phone: string;
+}): Promise<User> {
+  const res = await api.post<User>("/auth/signup", data);
+  return res.data;
+}
+
+export async function login(data: {
+  username: string;
+  password: string;
+}): Promise<User> {
+  const res = await api.post<User>("/auth/login", data);
+  return res.data;
+}
+
+// Attend APIs
 export async function fetchAttendList(): Promise<Attend[]> {
   const res = await api.get<Attend[]>("/attend");
   return res.data;
@@ -46,5 +81,18 @@ export async function updateAttend(
   data: Attend
 ): Promise<Attend> {
   const res = await api.put<Attend>(`/attend/${id}`, data);
+  return res.data;
+}
+
+export async function getParticipantContacts(
+  id: string,
+  host: string
+): Promise<ParticipantContact[]> {
+  const res = await api.get<ParticipantContact[]>(
+    `/attend/${id}/participants`,
+    {
+      params: { host },
+    }
+  );
   return res.data;
 }
